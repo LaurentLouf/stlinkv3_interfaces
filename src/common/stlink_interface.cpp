@@ -208,9 +208,18 @@ STLinkIf_StatusT STLinkInterface::LoadStlinkLibrary(const char *pPathOfProcess) 
 }
 /*
  * @brief Return true if STLinkInterface::LoadStlinkLibrary() has been called successfully.
+ *
+ * On Linux platforms, this function will always return true. Loading library does not work as on Windows : the library is not loaded from
+ * the code. Since this function may be used by others, it is mandatory that it returns true for Linux platforms, which may not call
+ * STLinkInterface::LoadStlinkLibrary
+ *
  */
 bool STLinkInterface::IsLibraryLoaded() {
+#ifdef WIN32
     return m_bApiDllLoaded;
+#else
+    return true;
+#endif
 }
 /**
  * @ingroup INTERFACE
